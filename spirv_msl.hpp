@@ -471,6 +471,11 @@ public:
 		// bug is fixed in Metal; it is provided as an option so it can be enabled
 		// only when the bug is present.
 		bool check_discarded_frag_stores = false;
+		
+		// When generating argument buffers, assume HW that is Tier2 or greater.
+		// Tier 1 does not support writable images on iOS
+		// Tier 2 also supports higher limits and 
+		bool argument_buffer_tier2 = false;
 
 		bool is_ios() const
 		{

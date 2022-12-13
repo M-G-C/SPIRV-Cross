@@ -645,6 +645,7 @@ struct CLIArguments
 	bool msl_pad_fragment_output = false;
 	bool msl_domain_lower_left = false;
 	bool msl_argument_buffers = false;
+	uint32_t msl_argument_buffer_tier2 = false;
 	bool msl_texture_buffer_native = false;
 	bool msl_framebuffer_fetch = false;
 	bool msl_invariant_float_math = false;
@@ -1190,6 +1191,7 @@ static string compile_iteration(const CLIArguments &args, std::vector<uint32_t> 
 		msl_opts.pad_fragment_output_components = args.msl_pad_fragment_output;
 		msl_opts.tess_domain_origin_lower_left = args.msl_domain_lower_left;
 		msl_opts.argument_buffers = args.msl_argument_buffers;
+		msl_opts.argument_buffer_tier2 = args.msl_argument_buffer_tier2;
 		msl_opts.texture_buffer_native = args.msl_texture_buffer_native;
 		msl_opts.multiview = args.msl_multiview;
 		msl_opts.multiview_layered_rendering = args.msl_multiview_layered_rendering;
@@ -1625,6 +1627,7 @@ static int main_inner(int argc, char *argv[])
 	        [&args](CLIParser &parser) { args.msl_discrete_descriptor_sets.push_back(parser.next_uint()); });
 	cbs.add("--msl-device-argument-buffer",
 	        [&args](CLIParser &parser) { args.msl_device_argument_buffers.push_back(parser.next_uint()); });
+	cbs.add("--msl-argument-buffer-tier2", [&args](CLIParser &) { args.msl_argument_buffers = true; args.msl_argument_buffer_tier2 = true; });
 	cbs.add("--msl-texture-buffer-native", [&args](CLIParser &) { args.msl_texture_buffer_native = true; });
 	cbs.add("--msl-framebuffer-fetch", [&args](CLIParser &) { args.msl_framebuffer_fetch = true; });
 	cbs.add("--msl-invariant-float-math", [&args](CLIParser &) { args.msl_invariant_float_math = true; });
@@ -1835,7 +1838,7 @@ static int main_inner(int argc, char *argv[])
 		args.msl_version = parser.next_uint();
 		args.set_msl_version = true;
 	});
-
+	
 	cbs.add("--remove-unused-variables", [&args](CLIParser &) { args.remove_unused = true; });
 	cbs.add("--combined-samplers-inherit-bindings",
 	        [&args](CLIParser &) { args.combined_samplers_inherit_bindings = true; });

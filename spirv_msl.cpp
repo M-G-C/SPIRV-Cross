@@ -11609,7 +11609,8 @@ string CompilerMSL::to_struct_member(const SPIRType &type, uint32_t member_type_
 	}
 
 	// Very specifically, image load-store in argument buffers are disallowed on MSL on iOS.
-	if (msl_options.is_ios() && physical_type.basetype == SPIRType::Image && physical_type.image.sampled == 2)
+	if (msl_options.is_ios() && !msl_options.argument_buffer_tier2 &&
+		physical_type.basetype == SPIRType::Image && physical_type.image.sampled == 2)
 	{
 		if (!has_decoration(orig_id, DecorationNonWritable))
 			SPIRV_CROSS_THROW("Writable images are not allowed in argument buffers on iOS.");
@@ -16958,7 +16959,7 @@ bool CompilerMSL::is_supported_argument_buffer_type(const SPIRType &type) const
 	// a NonWritable decoration. So just use discrete arguments for all storage images
 	// on iOS.
 	bool is_storage_image = type.basetype == SPIRType::Image && type.image.sampled == 2;
-	bool is_supported_type = !msl_options.is_ios() || !is_storage_image;
+	bool is_supported_type = !(msl_options.is_ios() && !msl_options.argument_buffer_tier2) || !is_storage_image;
 	return !type_is_msl_framebuffer_fetch(type) && is_supported_type;
 }
 

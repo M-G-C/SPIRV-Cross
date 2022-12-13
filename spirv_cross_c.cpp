@@ -731,6 +731,10 @@ spvc_result spvc_compiler_options_set_uint(spvc_compiler_options options, spvc_c
 	case SPVC_COMPILER_OPTION_MSL_CHECK_DISCARDED_FRAG_STORES:
 		options->msl.check_discarded_frag_stores = value != 0;
 		break;
+			
+	case SPVC_COMPILER_OPTION_MSL_ARGUMENT_BUFFER_TIER_2:
+			options->msl.argument_buffer_tier2 = value != 0;
+		break;
 #endif
 
 	default:
